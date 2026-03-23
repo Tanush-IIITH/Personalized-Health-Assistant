@@ -66,7 +66,7 @@ export function Sidebar() {
 
 export function BottomNav() {
   const pathname = usePathname();
-  const mobileItems = NAV_ITEMS.slice(0, 5);
+  const mobileItems = NAV_ITEMS.slice(0, 5); // dashboard, reports, alerts, trends, chat
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 flex md:hidden bg-slate-900/95 border-t border-slate-800/80 backdrop-blur-sm">
       {mobileItems.map(({ href, label, icon: Icon }) => {

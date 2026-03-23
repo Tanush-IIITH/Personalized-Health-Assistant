@@ -1,5 +1,6 @@
 /* Week 3+5+6 – Alerts page with interactive acknowledge/dismiss + toasts */
 "use client";
+export const dynamic = "force-dynamic";
 
 import { useState } from "react";
 import { CheckCheck, X } from "lucide-react";
@@ -132,11 +133,10 @@ function AlertCard({
     <Card
       className={cn(
         "space-y-2",
-        !alert.acknowledged && {
-          "alert-high": alert.severity === "critical" || alert.severity === "high",
-          "alert-medium": alert.severity === "medium",
-          "alert-low": alert.severity === "low",
-        }
+        !alert.acknowledged && alert.severity === "critical" && "border-red-600/70",
+        !alert.acknowledged && alert.severity === "high" && "border-red-700/60",
+        !alert.acknowledged && alert.severity === "medium" && "border-amber-700/50",
+        !alert.acknowledged && alert.severity === "low" && "border-blue-800/40"
       )}
       onClick={onToggle}
     >
