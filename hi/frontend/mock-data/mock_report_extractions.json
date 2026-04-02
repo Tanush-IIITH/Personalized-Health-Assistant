@@ -1,0 +1,246 @@
+{
+  "reports": [
+    {
+      "reportId": "test-report-001",
+      "fileName": "Thyroid_Function_Test_Mar2026.pdf",
+      "uploadedAt": "2026-03-04T14:30:00Z",
+      "patientId": "pat-test-001",
+      "reportType": "thyroid",
+      "pageCount": 2,
+      "ocrRawText": "THYROID FUNCTION TEST\nLaboratory Name: Diagnostic Health Services\nReport Date: 04-Mar-2026\nPatient Name: Rajesh Verma\nAge: 58 | Gender: Male | Sample ID: LAB-2026-89456\n\nTEST RESULTS:\nTest Name                Unit        Result      Reference Range    Status\n─────────────────────────────────────────────────────────────────────────\nTSH (Thyroid Stim. Hormon) mIU/L      2.4         0.4 - 4.0 mIU/L     NORMAL\nFree T4                   pmol/L     12.8        9.0 - 18.0 pmol/L   NORMAL\nFree T3                   pmol/L     4.2         2.6 - 5.7 pmol/L    NORMAL\nTotal T4                  nmol/L     98.5        64 - 154 nmol/L     NORMAL\n\nINTERPRETATION:\nThyroid function is normal. No evidence of hypo- or hyperthyroidism.",
+      "extractedData": {
+        "testType": "thyroid",
+        "testDate": "2026-03-04",
+        "labName": "Diagnostic Health Services",
+        "interpretation": "Normal thyroid function. No hypo- or hyperthyroidism detected.",
+        "testResults": [
+          {
+            "testName": "TSH",
+            "value": 2.4,
+            "unit": "mIU/L",
+            "referenceMin": 0.4,
+            "referenceMax": 4.0,
+            "status": "normal",
+            "normalRange": "0.4 - 4.0 mIU/L"
+          },
+          {
+            "testName": "Free T4",
+            "value": 12.8,
+            "unit": "pmol/L",
+            "referenceMin": 9.0,
+            "referenceMax": 18.0,
+            "status": "normal",
+            "normalRange": "9.0 - 18.0 pmol/L"
+          },
+          {
+            "testName": "Free T3",
+            "value": 4.2,
+            "unit": "pmol/L",
+            "referenceMin": 2.6,
+            "referenceMax": 5.7,
+            "status": "normal",
+            "normalRange": "2.6 - 5.7 pmol/L"
+          },
+          {
+            "testName": "Total T4",
+            "value": 98.5,
+            "unit": "nmol/L",
+            "referenceMin": 64,
+            "referenceMax": 154,
+            "status": "normal",
+            "normalRange": "64 - 154 nmol/L"
+          }
+        ],
+        "flags": []
+      },
+      "aiSummary": "Thyroid panel is completely normal. All hormone levels including TSH, Free T4, Free T3, and Total T4 are within reference ranges. No thyroid dysfunction detected. Patient does not require thyroid medication adjustment. Annual monitoring recommended.",
+      "confidence": 0.98
+    },
+    {
+      "reportId": "test-report-002",
+      "fileName": "Kidney_Function_Test_Feb2026.pdf",
+      "uploadedAt": "2026-02-18T10:15:00Z",
+      "patientId": "pat-test-002",
+      "reportType": "metabolic_panel",
+      "pageCount": 3,
+      "ocrRawText": "COMPREHENSIVE METABOLIC PANEL & KIDNEY FUNCTION TEST\nLaboratory: Metro Diagnostics Center\nReport Date: 18-Feb-2026\nPatient: Priya Nair | Age: 42 | Gender: Female | Ref: MET-2026-56234\n\nKIDNEY FUNCTION MARKERS:\n\nCreatinine                 mg/dL      1.3         0.6 - 1.2 mg/dL     HIGH ⚠️\nBUN (Blood Urea Nitrogen) mg/dL      24          7 - 20 mg/dL        HIGH ⚠️\nGFR (est.)                mL/min     58          >60 mL/min          LOW  ⚠️\nSodium                    mEq/L      138         136 - 145 mEq/L     NORMAL\nPotassium                 mEq/L      4.1         3.5 - 5.0 mEq/L     NORMAL\nPhosphorus                mg/dL      3.8         2.5 - 4.5 mg/dL     NORMAL\n\nCLINICAL INTERPRETATION:\nMildly elevated creatinine and BUN with estimated GFR 58 mL/min/1.73m² suggest Stage 2-3A chronic kidney disease. Recommend consultation with nephrologist, dietary sodium restriction, and repeat testing in 3 months.",
+      "extractedData": {
+        "testType": "metabolic_panel",
+        "testDate": "2026-02-18",
+        "labName": "Metro Diagnostics Center",
+        "interpretation": "Stage 2-3A CKD suggested by elevated creatinine and BUN with reduced GFR. Requires specialist evaluation.",
+        "testResults": [
+          {
+            "testName": "Creatinine",
+            "value": 1.3,
+            "unit": "mg/dL",
+            "referenceMin": 0.6,
+            "referenceMax": 1.2,
+            "status": "high",
+            "normalRange": "0.6 - 1.2 mg/dL"
+          },
+          {
+            "testName": "BUN",
+            "value": 24,
+            "unit": "mg/dL",
+            "referenceMin": 7,
+            "referenceMax": 20,
+            "status": "high",
+            "normalRange": "7 - 20 mg/dL"
+          },
+          {
+            "testName": "GFR",
+            "value": 58,
+            "unit": "mL/min",
+            "referenceMin": 60,
+            "referenceMax": 999,
+            "status": "low",
+            "normalRange": ">60 mL/min"
+          },
+          {
+            "testName": "Sodium",
+            "value": 138,
+            "unit": "mEq/L",
+            "referenceMin": 136,
+            "referenceMax": 145,
+            "status": "normal",
+            "normalRange": "136 - 145 mEq/L"
+          },
+          {
+            "testName": "Potassium",
+            "value": 4.1,
+            "unit": "mEq/L",
+            "referenceMin": 3.5,
+            "referenceMax": 5.0,
+            "status": "normal",
+            "normalRange": "3.5 - 5.0 mEq/L"
+          },
+          {
+            "testName": "Phosphorus",
+            "value": 3.8,
+            "unit": "mg/dL",
+            "referenceMin": 2.5,
+            "referenceMax": 4.5,
+            "status": "normal",
+            "normalRange": "2.5 - 4.5 mg/dL"
+          }
+        ],
+        "flags": [
+          "HIGH_CREATININE",
+          "HIGH_BUN",
+          "LOW_GFR",
+          "CKD_STAGE_2_3A"
+        ]
+      },
+      "aiSummary": "Metabolic panel indicates Stage 2-3A chronic kidney disease with creatinine 1.3 mg/dL (elevated), BUN 24 mg/dL (elevated), and estimated GFR 58 mL/min. Kidney function is declining. Electrolytes remain balanced. Immediate consultation with nephrology recommended for management plan. Dietary sodium and protein restriction advised. Repeat testing in 3 months. Monitor for progression to Stage 4 CKD.",
+      "confidence": 0.96
+    },
+    {
+      "reportId": "test-report-003",
+      "fileName": "Diabetes_Monitoring_Panel_Jan2026.pdf",
+      "uploadedAt": "2026-01-22T13:45:00Z",
+      "patientId": "pat-test-003",
+      "reportType": "diabetes",
+      "pageCount": 2,
+      "ocrRawText": "DIABETES MANAGEMENT & GLUCOSE MONITORING PANEL\nLab: Apollo Diagnostics, Pune\nReport Date: 22-Jan-2026\nPatient: Vikram Singh | Age: 51 | Diabetes Duration: 8 years | Ref: DIAB-2026-34098\n\nGLUCOSE CONTROL MARKERS:\n\nFasting Blood Glucose     mg/dL      156         70 - 100 mg/dL      HIGH ⚠️⚠️\nPostprandial Glucose (2h) mg/dL      238         <140 mg/dL          CRITICAL ⚠️⚠️\nHbA1c                     %          8.9         <5.7%               HIGH ⚠️⚠️\nGlycated Albumin          %          28          <17%                HIGH ⚠️\n\nLIPID PANEL (Related):\nTotal Cholesterol        mg/dL      245         <200 mg/dL          HIGH ⚠️\nLDL Cholesterol          mg/dL      165         <100 mg/dL          HIGH ⚠️\nHDL Cholesterol          mg/dL      32          >50 mg/dL           LOW  ⚠️\nTriglycerides            mg/dL      285         <150 mg/dL          HIGH ⚠️\n\nCLINICAL SUMMARY:\nPoorly controlled diabetes with HbA1c 8.9% indicating average 3-month glucose >250 mg/dL equivalent. Significant dyslipidemia evident. Risk of microvascular (retinopathy, nephropathy) and macrovascular (CAD) complications increased. URGENT: Medication review, lifestyle modifications, and referral to endocrinologist recommended.",
+      "extractedData": {
+        "testType": "diabetes",
+        "testDate": "2026-01-22",
+        "labName": "Apollo Diagnostics, Pune",
+        "interpretation": "Poorly controlled diabetes with high complication risk. Immediate intervention needed.",
+        "testResults": [
+          {
+            "testName": "Fasting Glucose",
+            "value": 156,
+            "unit": "mg/dL",
+            "referenceMin": 70,
+            "referenceMax": 100,
+            "status": "high",
+            "normalRange": "70 - 100 mg/dL"
+          },
+          {
+            "testName": "Postprandial Glucose",
+            "value": 238,
+            "unit": "mg/dL",
+            "referenceMin": 0,
+            "referenceMax": 140,
+            "status": "critical",
+            "normalRange": "<140 mg/dL"
+          },
+          {
+            "testName": "HbA1c",
+            "value": 8.9,
+            "unit": "%",
+            "referenceMin": 0,
+            "referenceMax": 5.7,
+            "status": "critical",
+            "normalRange": "<5.7%"
+          },
+          {
+            "testName": "Glycated Albumin",
+            "value": 28,
+            "unit": "%",
+            "referenceMin": 0,
+            "referenceMax": 17,
+            "status": "high",
+            "normalRange": "<17%"
+          },
+          {
+            "testName": "Total Cholesterol",
+            "value": 245,
+            "unit": "mg/dL",
+            "referenceMin": 0,
+            "referenceMax": 200,
+            "status": "high",
+            "normalRange": "<200 mg/dL"
+          },
+          {
+            "testName": "LDL",
+            "value": 165,
+            "unit": "mg/dL",
+            "referenceMin": 0,
+            "referenceMax": 100,
+            "status": "critical",
+            "normalRange": "<100 mg/dL"
+          },
+          {
+            "testName": "HDL",
+            "value": 32,
+            "unit": "mg/dL",
+            "referenceMin": 50,
+            "referenceMax": 999,
+            "status": "low",
+            "normalRange": ">50 mg/dL"
+          },
+          {
+            "testName": "Triglycerides",
+            "value": 285,
+            "unit": "mg/dL",
+            "referenceMin": 0,
+            "referenceMax": 150,
+            "status": "high",
+            "normalRange": "<150 mg/dL"
+          }
+        ],
+        "flags": [
+          "POORLY_CONTROLLED_DIABETES",
+          "HIGH_HBA1C",
+          "CRITICAL_GLUCOSE",
+          "DYSLIPIDEMIA",
+          "HIGH_CAD_RISK",
+          "HIGH_MICROVASCULAR_RISK",
+          "URGENT_ACTION_NEEDED"
+        ]
+      },
+      "aiSummary": "Diabetes is severely uncontrolled with HbA1c 8.9% (target<7%). Fasting glucose 156 mg/dL and post-meal glucose 238 mg/dL indicate need for medication intensification. Accompanying dyslipidemia (LDL 165, triglycerides 285) significantly increases cardiovascular risk. Patient requires urgent endocrinologist consultation for therapy adjustment, continuous glucose monitoring consideration, and intensive lifestyle intervention. Retinopathy and nephropathy screening recommended as complications may be present.",
+      "confidence": 0.97
+    }
+  ],
+  "metadata": {
+    "generatedBy": "report_payload_generator",
+    "version": "1.0",
+    "totalReports": 3,
+    "generatedAt": "2026-03-05T10:00:00Z",
+    "purpose": "Testing medical report extraction pipeline for Person 1"
+  }
+}

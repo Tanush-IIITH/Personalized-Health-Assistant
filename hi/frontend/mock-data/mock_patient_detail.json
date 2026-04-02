@@ -1,0 +1,182 @@
+{
+  "timestamp": "2026-03-05T09:30:00Z",
+  "patientId": "pat-1",
+  "patientName": "Riya Sharma",
+  "age": 28,
+  "gender": "female",
+  "bloodGroup": "B+",
+  "city": "Chennai",
+  "assignedDoctor": {
+    "id": "doc-1",
+    "name": "Dr. Priya Nair",
+    "specialization": "General Physician",
+    "hospital": "Apollo Hospitals, Chennai"
+  },
+  "recentMetrics": {
+    "date": "2026-03-05",
+    "steps": 3200,
+    "sleepHours": 4.5,
+    "heartRateAvg": 78,
+    "environment": {
+      "temperature": 33,
+      "humidity": 82,
+      "aqi": 145,
+      "city": "Chennai",
+      "season": "summer"
+    }
+  },
+  "reports": [
+    {
+      "reportId": "rep-2",
+      "fileName": "Lipid_Panel_Mar2026.pdf",
+      "reportType": "lipid_panel",
+      "uploadedAt": "2026-03-01T09:00:00Z",
+      "status": "ready",
+      "pageCount": 2,
+      "ocrSnippet": "LIPID PANEL REPORT\nPatient: Riya Sharma  Date: 01-Mar-2026\nTotal Cholesterol: 215 mg/dL  [Ref: <200]  HIGH\nLDL Cholesterol: 138 mg/dL  [Ref: <100]  HIGH\nHDL Cholesterol: 55 mg/dL  [Ref: >50]  NORMAL",
+      "extractedData": {
+        "testResults": [
+          {
+            "testId": "lr-5",
+            "testName": "Total Cholesterol",
+            "value": 215,
+            "unit": "mg/dL",
+            "referenceMin": 0,
+            "referenceMax": 200,
+            "status": "high",
+            "date": "2026-03-01"
+          },
+          {
+            "testId": "lr-6",
+            "testName": "LDL",
+            "value": 138,
+            "unit": "mg/dL",
+            "referenceMin": 0,
+            "referenceMax": 100,
+            "status": "high",
+            "date": "2026-03-01"
+          },
+          {
+            "testId": "lr-7",
+            "testName": "HDL",
+            "value": 55,
+            "unit": "mg/dL",
+            "referenceMin": 50,
+            "referenceMax": 80,
+            "status": "normal",
+            "date": "2026-03-01"
+          }
+        ]
+      },
+      "aiSummary": "Lipid panel shows elevated cholesterol with high LDL levels. Total cholesterol is 215 mg/dL (target <200) and LDL cholesterol is 138 mg/dL (target <100). HDL is within normal range at 55 mg/dL. Recommend dietary modifications with increased fiber intake, regular cardiovascular exercise 150 mins/week, and consider statin therapy if not already on medication. Follow-up test in 3 months."
+    },
+    {
+      "reportId": "rep-1",
+      "fileName": "CBC_Report_Jan2026.pdf",
+      "reportType": "blood_test",
+      "uploadedAt": "2026-01-15T10:30:00Z",
+      "status": "ready",
+      "pageCount": 3,
+      "ocrSnippet": "COMPLETE BLOOD COUNT\nPatient: Riya Sharma  Date: 15-Jan-2026\nHaemoglobin: 9.8 g/dL  [Ref: 12.0–16.0]  LOW\nSerum Iron: 42 µg/dL  [Ref: 60–170]  LOW\nFerritin: 7 ng/mL  [Ref: 12–150]  LOW\nWBC: 7200 cells/µL  [Ref: 4500–11000]  NORMAL",
+      "extractedData": {
+        "testResults": [
+          {
+            "testId": "lr-1",
+            "testName": "Haemoglobin",
+            "value": 9.8,
+            "unit": "g/dL",
+            "referenceMin": 12.0,
+            "referenceMax": 16.0,
+            "status": "critical",
+            "date": "2026-01-15"
+          },
+          {
+            "testId": "lr-2",
+            "testName": "Serum Iron",
+            "value": 42,
+            "unit": "µg/dL",
+            "referenceMin": 60,
+            "referenceMax": 170,
+            "status": "critical",
+            "date": "2026-01-15"
+          },
+          {
+            "testId": "lr-3",
+            "testName": "Ferritin",
+            "value": 7,
+            "unit": "ng/mL",
+            "referenceMin": 12,
+            "referenceMax": 150,
+            "status": "critical",
+            "date": "2026-01-15"
+          },
+          {
+            "testId": "lr-4",
+            "testName": "WBC",
+            "value": 7200,
+            "unit": "cells/µL",
+            "referenceMin": 4500,
+            "referenceMax": 11000,
+            "status": "normal",
+            "date": "2026-01-15"
+          }
+        ]
+      },
+      "aiSummary": "Complete Blood Count indicates iron deficiency anaemia. Haemoglobin is critically low at 9.8 g/dL (normal 12-16), serum iron is 42 µg/dL (normal 60-170), and ferritin is severely depleted at 7 ng/mL (normal 12-150). WBC is normal. Immediate intervention required: ferrous sulfate supplementation 325mg daily with vitamin C for absorption, dietary iron rich foods (red meat, spinach, lentils), and repeat testing in 4-6 weeks. Consider internal bleeding workup if no dietary deficiency identified."
+    }
+  ],
+  "alerts": [
+    {
+      "alertId": "alert-1",
+      "severity": "high",
+      "category": "lab",
+      "title": "Iron Deficiency Anaemia Detected",
+      "reason": "Haemoglobin and Serum Iron are critically below reference range.",
+      "evidence": [
+        "Haemoglobin: 9.8 g/dL (ref 12–16)",
+        "Serum Iron: 42 µg/dL (ref 60–170)",
+        "Ferritin: 7 ng/mL (ref 12–150)"
+      ],
+      "createdAt": "2026-01-16T07:00:00Z",
+      "acknowledged": false,
+      "recommendedAction": "Start ferrous sulfate supplementation, increase dietary iron intake, retest in 6 weeks"
+    },
+    {
+      "alertId": "alert-2",
+      "severity": "medium",
+      "category": "environment",
+      "title": "Fatigue Risk — Heat + Low Iron",
+      "reason": "Poor sleep combined with extreme heat and existing low iron increases fatigue risk significantly.",
+      "evidence": [
+        "Sleep: 4.5 hrs (2026-03-05)",
+        "Temperature: 38°C max in Chennai",
+        "Heatwave flag active",
+        "Haemoglobin: 9.8 g/dL"
+      ],
+      "createdAt": "2026-03-05T06:00:00Z",
+      "acknowledged": false,
+      "recommendedAction": "Avoid outdoor activity during peak heat (11am-4pm), stay hydrated, ensure 7-8 hrs sleep"
+    },
+    {
+      "alertId": "alert-3",
+      "severity": "medium",
+      "category": "environment",
+      "title": "Poor Air Quality — Breathing Risk",
+      "reason": "AQI 145 with PM2.5 at 72 µg/m³. Outdoor activity should be limited.",
+      "evidence": [
+        "AQI: 145 (Unhealthy)",
+        "PM2.5: 72 µg/m³",
+        "PM10: 110 µg/m³"
+      ],
+      "createdAt": "2026-03-05T06:00:00Z",
+      "acknowledged": false,
+      "recommendedAction": "Use N95 masks for outdoor activity, limit vigorous exercise outdoors, monitor respiratory symptoms"
+    }
+  ],
+  "metadata": {
+    "generatedBy": "mock_data_generator",
+    "version": "1.0",
+    "containsSensitiveData": true,
+    "clearanceLevel": "doctor"
+  }
+}

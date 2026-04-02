@@ -1,0 +1,231 @@
+{
+  "timestamp": "2026-03-05T09:30:00Z",
+  "doctorId": "doc-1",
+  "doctorName": "Dr. Priya Nair",
+  "patientsUnderCare": [
+    {
+      "patientId": "pat-1",
+      "name": "Riya Sharma",
+      "age": 28,
+      "gender": "female",
+      "city": "Chennai",
+      "phoneNumber": "+91-8899-123456",
+      "blood_group": "B+",
+      "lastCheckupDate": "2026-02-28",
+      "priorityScore": 9.2,
+      "alertSeverity": "high",
+      "activeAlertsCount": 3,
+      "activeAlerts": [
+        {
+          "alertId": "alert-1",
+          "severity": "high",
+          "category": "lab",
+          "title": "Iron Deficiency Anaemia Detected",
+          "createdAt": "2026-01-16T07:00:00Z"
+        },
+        {
+          "alertId": "alert-2",
+          "severity": "medium",
+          "category": "environment",
+          "title": "Fatigue Risk — Heat + Low Iron",
+          "createdAt": "2026-03-05T06:00:00Z"
+        },
+        {
+          "alertId": "alert-3",
+          "severity": "medium",
+          "category": "environment",
+          "title": "Poor Air Quality — Breathing Risk",
+          "createdAt": "2026-03-05T06:00:00Z"
+        }
+      ],
+      "recentReports": [
+        {
+          "reportId": "rep-2",
+          "reportType": "lipid_panel",
+          "fileName": "Lipid_Panel_Mar2026.pdf",
+          "uploadedAt": "2026-03-01T09:00:00Z",
+          "status": "ready"
+        },
+        {
+          "reportId": "rep-1",
+          "reportType": "blood_test",
+          "fileName": "CBC_Report_Jan2026.pdf",
+          "uploadedAt": "2026-01-15T10:30:00Z",
+          "status": "ready"
+        }
+      ],
+      "healthMetricsSummary": {
+        "avgSteps": 4671,
+        "avgSleepHours": 5.84,
+        "avgHeartRate": 76.43
+      }
+    },
+    {
+      "patientId": "pat-2",
+      "name": "Karan Patel",
+      "age": 45,
+      "gender": "male",
+      "city": "Bangalore",
+      "phoneNumber": "+91-9988-654321",
+      "blood_group": "O+",
+      "lastCheckupDate": "2026-02-15",
+      "priorityScore": 8.5,
+      "alertSeverity": "high",
+      "activeAlertsCount": 1,
+      "activeAlerts": [
+        {
+          "alertId": "alert-4",
+          "severity": "high",
+          "category": "lab",
+          "title": "Elevated HbA1c — Diabetic Range",
+          "createdAt": "2026-02-21T08:00:00Z"
+        }
+      ],
+      "recentReports": [
+        {
+          "reportId": "rep-3",
+          "reportType": "diabetes",
+          "fileName": "HbA1c_Feb2026.pdf",
+          "uploadedAt": "2026-02-20T14:00:00Z",
+          "status": "ready"
+        },
+        {
+          "reportId": "rep-5",
+          "reportType": "lipid_panel",
+          "fileName": "Lipid_Panel_Jan2026.pdf",
+          "uploadedAt": "2026-01-10T08:30:00Z",
+          "status": "ready"
+        }
+      ],
+      "healthMetricsSummary": {
+        "avgSteps": 7956,
+        "avgSleepHours": 6.87,
+        "avgHeartRate": 71.29
+      }
+    },
+    {
+      "patientId": "pat-3",
+      "name": "Meera Iyer",
+      "age": 35,
+      "gender": "female",
+      "city": "Mumbai",
+      "phoneNumber": "+91-7766-889900",
+      "blood_group": "A-",
+      "lastCheckupDate": "2026-03-01",
+      "priorityScore": 6.8,
+      "alertSeverity": "medium",
+      "activeAlertsCount": 1,
+      "activeAlerts": [
+        {
+          "alertId": "alert-5",
+          "severity": "medium",
+          "category": "environment",
+          "title": "Air Quality Alert — Mumbai",
+          "createdAt": "2026-03-05T07:00:00Z"
+        }
+      ],
+      "recentReports": [
+        {
+          "reportId": "rep-4",
+          "reportType": "thyroid",
+          "fileName": "Thyroid_Feb2026.pdf",
+          "uploadedAt": "2026-02-10T11:00:00Z",
+          "status": "processing"
+        }
+      ],
+      "healthMetricsSummary": {
+        "avgSteps": 3192,
+        "avgSleepHours": 5.36,
+        "avgHeartRate": 81.57
+      }
+    },
+    {
+      "patientId": "pat-4",
+      "name": "Rajesh Gupta",
+      "age": 52,
+      "gender": "male",
+      "city": "Delhi",
+      "phoneNumber": "+91-6655-445566",
+      "blood_group": "AB+",
+      "lastCheckupDate": "2026-01-25",
+      "priorityScore": 7.4,
+      "alertSeverity": "medium",
+      "activeAlertsCount": 2,
+      "activeAlerts": [
+        {
+          "alertId": "alert-6",
+          "severity": "medium",
+          "category": "lab",
+          "title": "Cholesterol Levels Elevated",
+          "createdAt": "2026-02-28T10:15:00Z"
+        },
+        {
+          "alertId": "alert-7",
+          "severity": "low",
+          "category": "activity",
+          "title": "Step Count Below Target",
+          "createdAt": "2026-03-04T08:00:00Z"
+        }
+      ],
+      "recentReports": [
+        {
+          "reportId": "rep-6",
+          "reportType": "lipid_panel",
+          "fileName": "Lipid_Panel_Feb2026.pdf",
+          "uploadedAt": "2026-02-28T11:30:00Z",
+          "status": "ready"
+        }
+      ],
+      "healthMetricsSummary": {
+        "avgSteps": 3456,
+        "avgSleepHours": 6.21,
+        "avgHeartRate": 74.5
+      }
+    },
+    {
+      "patientId": "pat-5",
+      "name": "Anjali Desai",
+      "age": 42,
+      "gender": "female",
+      "city": "Pune",
+      "phoneNumber": "+91-5544-776655",
+      "blood_group": "B-",
+      "lastCheckupDate": "2026-03-02",
+      "priorityScore": 5.2,
+      "alertSeverity": "low",
+      "activeAlertsCount": 1,
+      "activeAlerts": [
+        {
+          "alertId": "alert-8",
+          "severity": "low",
+          "category": "trend",
+          "title": "Slight Sleep Decline Observed",
+          "createdAt": "2026-03-03T09:00:00Z"
+        }
+      ],
+      "recentReports": [
+        {
+          "reportId": "rep-7",
+          "reportType": "blood_test",
+          "fileName": "CBC_Report_Feb2026.pdf",
+          "uploadedAt": "2026-02-25T14:45:00Z",
+          "status": "ready"
+        }
+      ],
+      "healthMetricsSummary": {
+        "avgSteps": 6234,
+        "avgSleepHours": 7.12,
+        "avgHeartRate": 68.9
+      }
+    }
+  ],
+  "metadata": {
+    "totalUnderCare": 5,
+    "criticalCount": 0,
+    "highPriorityCount": 2,
+    "mediumPriorityCount": 2,
+    "lowPriorityCount": 1,
+    "generatedBy": "mock_data_generator",
+    "version": "1.0"
+  }
+}
