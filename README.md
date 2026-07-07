@@ -1,4 +1,4 @@
-# Vitalis — Personalized AI Health Assistant
+# Personalized AI Health Assistant
 
 > A dual-sided healthcare platform bridging static medical reports and continuous wearable vitals, built in collaboration with **SuryaQuantum AI** for the *Design and Analysis of Software Systems* course at IIIT Hyderabad.
 
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Vitalis is a **dual-sided** healthcare platform with:
+A **dual-sided** healthcare platform with:
 
 - A **patient-facing Android app** — a voice-enabled AI health coach that answers questions grounded in the patient's own lab reports and live wearable data.
 - A **doctor-facing web dashboard** — a remote monitoring and risk management portal for clinicians to track patient biomarkers, alerts, and AI-generated clinical summaries.
