@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+    #!/usr/bin/env python3
 """Async cron script — nightly rules-engine sweep for all active patients.
 
 Architecture

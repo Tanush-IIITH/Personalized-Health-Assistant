@@ -677,7 +677,7 @@ async def run_full_pipeline_background(
             "Inserted %d lab results (%d skipped) for report_id=%s",
             inserted, skipped, report_id,
         )
-        update_report_metadata(
+        update_report_metadata(                       
             client=client,
             report_id=report_id,
             metadata=gemini_result.metadata,

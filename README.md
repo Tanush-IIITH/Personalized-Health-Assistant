@@ -1,164 +1,322 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/4T_GxXnv)
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=22370081&assignment_repo_type=AssignmentRepo)
-# DASS Spring 2026 Template
+# Vitalis — Personalized AI Health Assistant
 
-This template includes an Excel-based status tracker and an automated weekly snapshot workflow for submissions.
+> A dual-sided healthcare platform bridging static medical reports and continuous wearable vitals, built in collaboration with **SuryaQuantum AI** for the *Design and Analysis of Software Systems* course at IIIT Hyderabad.
 
-## Quick Start
-1. Create/update `docs/StatusTracker.xls` in Microsoft Excel (binary file; do not replace with CSV).
-2. Use these columns in row 1:
-   - Week
-   - Activity Name
-   - Type
-   - Responsible
-   - Est Hours
-   - Actual Hours
-   - Status
-3. Add weekly header rows (Week 1, Week 2, etc.) so students fill in below each header.
-4. Save the file in `docs/` and commit it.
+[![Backend](https://img.shields.io/badge/Backend-FastAPI%20%7C%20Python-009688?style=flat-square&logo=fastapi)](src/backend/)
+[![Mobile](https://img.shields.io/badge/Mobile-Kotlin%20%7C%20Jetpack%20Compose-7C4DFF?style=flat-square&logo=android)](src/android/)
+[![Frontend](https://img.shields.io/badge/Frontend-Vanilla%20JS%20%7C%20HTML-F7DF1E?style=flat-square&logo=javascript)](src/frontend/)
+[![Database](https://img.shields.io/badge/Database-Supabase%20%7C%20pgvector-3ECF8E?style=flat-square&logo=supabase)](src/db/)
+[![LLM](https://img.shields.io/badge/LLM-Gemini%203.1%20Pro-4285F4?style=flat-square&logo=google)](src/backend/services/llm/)
 
-## Repository Layout
-- `.github/workflows/weekly-snapshot.yml` auto-creates weekly release snapshots.
-- `.github/workflows/snapshot-integrity.yml` detects tampering of past weekly snapshots.
-- `docs/StatusTracker.xls` Excel tracker (update weekly).
-- `docs/ProjectPlan.md` project plan template.
-- `docs/release-labels.txt` optional: add weekly labels/categories for TAs.
-- `docs/admin-setup.md` TA-only: required repo settings (tag protection).
-- `src/` project source code.
+---
 
-## Project Source Layout (Current)
+## Overview
 
-This repository started from the DASS template, but the actual implementation lives under `src/`.
+Vitalis is a **dual-sided** healthcare platform with:
 
-### Backend (`src/backend/`)
+- A **patient-facing Android app** — a voice-enabled AI health coach that answers questions grounded in the patient's own lab reports and live wearable data.
+- A **doctor-facing web dashboard** — a remote monitoring and risk management portal for clinicians to track patient biomarkers, alerts, and AI-generated clinical summaries.
 
-The backend is organized as a proper Python package (`backend.*` imports), with clear layering:
+The system unifies three historically siloed data sources — PDF medical reports, high-frequency wearable vitals, and live environmental data — into a single, context-aware AI reasoning layer.
 
-- `src/backend/main.py`
-  - FastAPI app entrypoint (mounts routers)
-  - Run (from `src/`): `uvicorn backend.main:app --reload`
+---
 
-- `src/backend/routes/`
-  - HTTP layer (FastAPI `APIRouter`)
-  - Thin request/response mapping; delegates to controllers
+## Key Architectural Highlights
 
-- `src/backend/controllers/`
-  - Application orchestration (“use-case” style functions)
-  - Validates inputs, coordinates services/infrastructure calls
+### Advanced RAG Pipeline with FAISS Fallback
+The retrieval engine uses **Supabase pgvector** as the primary vector store for semantic search over embedded medical report chunks. A fully operational, in-memory **FAISS fallback** architecture activates automatically if the pgvector extension is unavailable, ensuring the RAG pipeline is highly available with zero manual intervention. Chunks are embedded using `BAAI/bge-base-en-v1.5` (top MTEB-ranked, CPU-deployable) with 768-dimensional normalized vectors, enabling cosine similarity via inner product.
 
-- `src/backend/services/`
-  - Reusable business/processing logic (no FastAPI coupling)
-  - `services/preprocessing/`: OCR text cleaning + chunking utilities
-  - `services/embeddings/`: query/chunk embedding abstractions + implementations
-  - `services/retrieval/`: retrieval stubs / retrieval logic modules
-  - Compatibility shims remain at `services/text_cleaning.py`, `services/chunking.py`, `services/mock_retrieval.py`
+### Longitudinal Lab Tracking via SQL Window Functions
+Custom **PostgreSQL Window Functions** (`ROW_NUMBER`, `LAG`, ranked partitions) isolate and track the historical trajectory of individual biomarkers across multiple hospital visits. Rather than querying raw unstructured text, the AI layer receives structured trend arrays — enabling mathematical correlation of, e.g., a rising HbA1c trend over three quarters — grounded entirely in verifiable lab data.
 
-- `src/backend/config/`
-  - Environment-based configuration helpers (e.g., Supabase client)
+### Automated Summary Generation with `pg_cron`
+An asynchronous, concurrent pipeline orchestrated by **`pg_cron`** runs weekly LLM generation sweeps. The system generates two role-specific outputs simultaneously: empathetic weekly goal summaries for patients, and dense clinical overviews for doctors. Each summary is produced with Gemini 3.1 Pro at temperature 0.1 to guarantee near-deterministic, factually grounded output.
 
-- `src/backend/ocr/` and `src/backend/ocr2/`
-  - OCR + deterministic extraction pipeline modules
+### Wearable Data Pivot Pipeline
+Solved *LLM temporal blindness* by building a Python-driven **calendar pivot system** that aligns high-frequency wearable readings (heart rate, SpO₂, steps, sleep stages) into strict, gap-filled daily arrays. This allows Gemini to accurately correlate day-to-day metric drops with health events logged in medical reports — bridging the gap between continuous sensor streams and episodic clinical data.
 
-- `src/backend/contracts/`
-  - API/context contract artifacts (e.g., context schema)
+### Environmental Context Integration
+Live **Open-Meteo AQI and weather data** is fetched per patient location and injected into every RAG context window. This enables location-aware health coaching — for example, the AI can modify respiratory alerts or outdoor activity advice in real time based on hazardous local air quality readings.
 
-- `src/backend/prompts/`
-  - LLM system prompts used by the application
+### Privacy & Security Hardening
+Row-Level Security (RLS) policies enforced at the database layer (`015_privacy_hardening.sql`) ensure strict user-data isolation. All alert evidence is stored as verifiable, traceable database records — LLM-generated or dynamically inferred evidence is explicitly forbidden by the schema contract.
 
-- `src/backend/scripts/`
-  - Developer smoke tests / utilities (not imported by production code)
+---
 
-- `src/backend/tests/`
-  - Unit tests and fixtures
+## System Architecture
 
-### Frontend (`src/frontend/`)
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                        CLIENT LAYER                                 │
+│   ┌──────────────────────┐    ┌──────────────────────────────────┐  │
+│   │  Android App (Kotlin) │    │  Doctor Dashboard (Vanilla JS)   │  │
+│   │  Jetpack Compose UI   │    │  doctor-dashboard.html           │  │
+│   │  Voice STT/TTS        │    │  doctor-patient.html             │  │
+│   └──────────┬───────────┘    └───────────────┬──────────────────┘  │
+└──────────────┼────────────────────────────────┼────────────────────┘
+               │  HTTPS / WebSocket             │  HTTPS
+┌──────────────▼────────────────────────────────▼────────────────────┐
+│                    FASTAPI BACKEND (src/backend/)                   │
+│                                                                     │
+│  Routes → Controllers → Services                                    │
+│                                                                     │
+│  ┌────────────┐  ┌────────────┐  ┌───────────┐  ┌───────────────┐  │
+│  │ RAG Engine │  │ Rules/     │  │ Summaries │  │ Wearable      │  │
+│  │ pgvector + │  │ Alerts     │  │ Generator │  │ Pivot Service │  │
+│  │ FAISS      │  │ Engine     │  │ (pg_cron) │  │               │  │
+│  └─────┬──────┘  └─────┬──────┘  └─────┬─────┘  └──────┬────────┘  │
+│        │               │               │                │           │
+│  ┌─────▼───────────────▼───────────────▼────────────────▼────────┐  │
+│  │              Context Builder                                   │  │
+│  │  RAG chunks + Lab trends + Wearables + AQI/Weather + Alerts   │  │
+│  └────────────────────────────┬───────────────────────────────────┘  │
+│                               │                                     │
+│  ┌────────────────────────────▼───────────────────────────────────┐  │
+│  │              Gemini 3.1 Pro (temperature = 0.1)                │  │
+│  └────────────────────────────────────────────────────────────────┘  │
+└───────────────────────────────┬─────────────────────────────────────┘
+                                │
+┌───────────────────────────────▼─────────────────────────────────────┐
+│                  SUPABASE (PostgreSQL + pgvector)                    │
+│  medical_reports │ lab_results │ report_chunks │ wearable_vitals     │
+│  alerts │ alert_evidence │ health_summaries │ environmental_data     │
+└─────────────────────────────────────────────────────────────────────┘
+```
 
-Static doctor portal UI built with HTML, inline CSS, and vanilla JavaScript.
+---
 
-**Doctor pages**
+## Repository Structure
 
-- `src/frontend/doctor-login.html` — Doctor sign-in screen
-- `src/frontend/doctor-dashboard.html` — Doctor patient roster
-- `src/frontend/doctor-patient.html` — Patient detail view
-- `src/frontend/doctor-admin.html` — Admin doctor provisioning
+```
+Personalized-Health-Assistant/
+├── README.md                      ← You are here
+├── .env.example                   ← Environment variable template
+├── .gitignore
+├── .gitattributes
+│
+├── src/                           ← All application source code
+│   ├── README.md                  ← Source layer overview
+│   │
+│   ├── backend/                   ← Python FastAPI backend
+│   │   ├── main.py                ← App entrypoint, router mounts
+│   │   ├── requirements.txt       ← Python dependencies
+│   │   ├── config/                ← Supabase client, env config
+│   │   ├── routes/                ← HTTP route handlers (FastAPI APIRouter)
+│   │   ├── controllers/           ← Use-case orchestration logic
+│   │   ├── services/              ← Core business logic modules
+│   │   │   ├── preprocessing/     ← OCR cleaning, text chunking
+│   │   │   ├── embeddings/        ← Sentence embedding interfaces & impl
+│   │   │   ├── retrieval/         ← pgvector + FAISS retrieval engine
+│   │   │   ├── context/           ← Context builder (RAG assembly)
+│   │   │   ├── llm/               ← Gemini service, prompt builder
+│   │   │   ├── summaries/         ← Weekly summary generation
+│   │   │   ├── wearable/          ← Wearable data pivot pipeline
+│   │   │   └── environment/       ← Open-Meteo AQI/weather integration
+│   │   ├── extraction/            ← Gemini-powered lab data extraction
+│   │   ├── labs/                  ← Lab result normalization engine
+│   │   ├── rules/                 ← Deterministic clinical alert rules
+│   │   ├── ocr/                   ← Tesseract OCR pipeline
+│   │   ├── prompts/               ← LLM system prompts (role-specific)
+│   │   ├── middleware/            ← Auth middleware (JWT/Supabase)
+│   │   ├── models/                ← Pydantic data models
+│   │   ├── contracts/             ← API and context schema contracts
+│   │   └── scripts/               ← Dev utilities, cron runners, seeders
+│   │
+│   ├── frontend/                  ← Doctor-facing web dashboard
+│   │   ├── doctor-login.html      ← Clinician sign-in
+│   │   ├── doctor-dashboard.html  ← Patient roster view
+│   │   ├── doctor-patient.html    ← Individual patient detail
+│   │   ├── doctor-admin.html      ← Doctor provisioning panel
+│   │   └── js/                    ← API clients, render helpers
+│   │
+│   ├── android/                   ← Patient-facing Android app
+│   │   ├── ARCHITECTURE.md        ← Clean-architecture reference map
+│   │   └── app/src/main/java/com/vitalis/health/
+│   │       ├── data/              ← Models, network, adapters, repository
+│   │       ├── ui/                ← ViewModels, Compose screens
+│   │       └── di/                ← Dependency injection / NetworkModule
+│   │
+│   ├── db/                        ← Database schema and migrations
+│   │   ├── schema.sql             ← Base table definitions
+│   │   ├── schema.md              ← Schema contract documentation
+│   │   └── migrations/            ← 24 sequential migration files
+│   │
+│   ├── mock-data/                 ← Test data generators and JSON fixtures
+│   │   ├── generate_test_pdfs.js
+│   │   ├── generate_wearable_data.js
+│   │   ├── wearable_payload.json
+│   │   ├── mock_doctor_roster.json
+│   │   └── mock_patient_detail.json
+│   │
+│   ├── sample_reports/            ← Sample PDF medical reports for testing
+│   └── types/                     ← Shared TypeScript/JSON type definitions
+│
+├── docs/                          ← Project documentation and artifacts
+│   ├── README.md                  ← Documentation index
+│   ├── ProjectPlan.md             ← Sprint plan and milestone tracker
+│   ├── hyperparameter_documentation.md ← All AI tuning decisions
+│   ├── admin-setup.md             ← Repository setup guide (TA)
+│   ├── release-labels.txt         ← Weekly release category labels
+│   ├── StatusTracker.xls          ← Live development effort tracker
+│   ├── TestPlan_Team48.xls        ← Test plan spreadsheet
+│   ├── 48_SRS.pdf                 ← Software Requirements Specification
+│   ├── Design.doc                 ← System design document
+│   ├── Requirements.doc           ← Requirements specification
+│   ├── ProjectSynopsis.doc        ← Project synopsis
+│   ├── MOMs/                      ← Minutes of meetings (4 sessions)
+│   ├── slides/                    ← Presentation LaTeX sources
+│   ├── team_specs/                ← Individual contribution specs
+│   │   ├── Tanush.md              ← AI engine, RAG, data pipelines
+│   │   ├── Aditya.md
+│   │   ├── Avnish.md
+│   │   └── Rishabh.md
+│   └── Release 1/                 ← Release 1 deliverables
+│
+└── tests/                         ← Test suite
+    ├── README.md                  ← Testing documentation
+    ├── security                   ← Security audit notes
+    └── testcases/                 ← Structured test case documents
+        ├── README.md
+        ├── test-cases.md
+        ├── test-cases.csv
+        ├── comprehensive-test-cases.md
+        └── comprehensive-test-cases.csv
+```
 
-**Related JavaScript (used by the doctor pages)**
+---
 
-- `src/frontend/js/doctor-api.js` — Doctor API client for /api/v1/doctor/* endpoints
-- `src/frontend/js/api.js` — Shared API client, reports, and WebSocket helpers
-- `src/frontend/js/components.js` — Reusable UI render helpers
-- `src/frontend/js/demo-data.js` — Demo data fallbacks
+## Tech Stack
 
-**Tech stack:** HTML, CSS, vanilla JavaScript, Fetch API, WebSocket API
+| Layer | Technology |
+|---|---|
+| **Backend API** | Python 3.11+, FastAPI, Uvicorn, Pydantic v2 |
+| **AI / LLM** | Google Gemini 3.1 Pro (chat), Gemini 2.0 Flash (preprocessing) |
+| **Embeddings** | `BAAI/bge-base-en-v1.5` via `sentence-transformers` |
+| **Vector Search** | Supabase pgvector (primary), FAISS-CPU (fallback) |
+| **Database** | Supabase (PostgreSQL), `pg_cron` for scheduled jobs |
+| **OCR** | Tesseract via `pytesseract`, OpenCV, pdf2image |
+| **Mobile App** | Kotlin, Jetpack Compose, Retrofit, OkHttp, Android STT/TTS |
+| **Doctor Dashboard** | Vanilla HTML/CSS/JavaScript, Fetch API, WebSocket |
+| **Environment API** | Open-Meteo (AQI + weather, zero API key required) |
+| **Auth** | Supabase Auth (JWT), Row-Level Security (RLS) |
 
-### Mobile App (`src/android/`)
+---
 
-The native Android application is built with Kotlin and Jetpack Compose. It connects to the backend API layer and provides the mobile user experience, complete with an AI voice-chat UI supporting native Speech-to-Text (STT) and Text-to-Speech (TTS).
+## Getting Started
 
-**Running locally:**
-1. Open the `src/android` directory in **Android Studio**.
-2. Let Gradle sync the dependencies (requires JDK 17+).
-3. Important: Update the `BASE_URL` in `HealthApiService.kt` (or your build config) to point to your local/production backend IP address instead of `localhost`.
-4. Run on an Android Emulator or a physical device.
+### Prerequisites
+- Python 3.11+
+- A [Supabase](https://supabase.com) project with the `vector` extension enabled
+- A Google AI API key (Gemini)
+- Tesseract OCR + Poppler installed on the host OS
+- Android Studio (for the mobile app)
 
-**Tech stack:** Kotlin, Jetpack Compose, Retrofit, OkHttp, Android Native STT/TTS
+### Backend Setup
 
-## Notes
-- `.gitattributes` marks `.xls/.xlsx` as binary to avoid noisy diffs.
-- `.gitignore` ignores Office temp files like `~$StatusTracker.xls`.
+```bash
+# 1. Clone and enter the project
+git clone <repo-url>
+cd Personalized-Health-Assistant
 
-## Weekly submission integrity (anti-cheat)
+# 2. Install Python dependencies
+cd src/backend
+pip install -r requirements.txt
 
-### What is enforced automatically
-Every Friday, GitHub Actions will:
+# 3. Configure environment variables
+cp .env.example .env
+# Edit .env — set SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, GEMINI_API_KEY
 
-1. **Require weekly activity**: `docs/StatusTracker.xls` and `docs/ProjectPlan.md` must have at least one commit in the current week window.
-2. **Create an immutable anchor**: an **annotated git tag** `submission-week-N` is created pointing to the repository state for that week.
-3. **Create a release** from that tag. The release body is exactly the annotated tag message.
-4. **Include a hash manifest**: the tag/release body includes sha256 hashes of every file under `src/` and `docs/`.
+# 4. Apply database migrations (from the project root)
+# Run src/db/schema.sql first, then apply migrations in order:
+# src/db/migrations/000_create_users_table.sql → 023_fix_daily_aggregation_max_per_day.sql
 
-If any check fails, the weekly release/tag is **not created** (the workflow fails).
+# 5. Start the backend server (run from src/)
+cd src
+uvicorn backend.main:app --reload --port 8000
+```
 
-### How teams add "labels/categories" without editing the Release
-Edit `docs/release-labels.txt`. Its contents are included in the tag annotation + release body.
+### Doctor Dashboard
+Open `src/frontend/doctor-login.html` directly in a browser. No build step required.
 
-### Allowing teams to add extra git tags
-Teams may create additional git tags (e.g., `milestone-1`) on their own commits.
-However, to prevent rewriting submission history, course admins should enable **Tag protection** for:
+### Android App
+1. Open `src/android/` in **Android Studio**.
+2. Let Gradle sync (requires JDK 17+).
+3. Update `BASE_URL` in `HealthApiService.kt` to point to your backend.
+4. Run on an emulator or physical device.
 
-- `submission-week-*` (no deletions / force-updates)
+---
 
-### Tamper detection
-Another workflow runs periodically to verify that for every `submission-week-*` tag:
+## Core API Endpoints
 
-- the GitHub Release body matches the annotated tag message (SHA256 check)
+### Report Ingestion
+| Method | Path | Description |
+|--------|------|-------------|
+| `POST` | `/api/v1/reports/ingest` | Upload PDF → OCR → Gemini extraction (async, returns 202) |
+| `GET` | `/api/v1/reports/status/{report_id}` | Poll: `pending → ocr_complete → done / failed` |
+| `POST` | `/api/v1/reports/process` | Blocking ingest (for scripts/tests) |
 
-If a mismatch is found, it fails and opens a GitHub Issue as an audit trail.
+### AI / RAG
+| Method | Path | Description |
+|--------|------|-------------|
+| `POST` | `/api/v1/rag/query` | Patient-facing AI chat (RAG + wearables + env context) |
+| `POST` | `/api/v1/voice/query` | Voice-optimized AI query endpoint |
 
-> Note: GitHub cannot fully prevent cheating if students have full write access, but protected submission tags + hash manifests make manipulation difficult and highly detectable.
+### Doctor Portal
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/api/v1/doctor/patients` | List patients assigned to a doctor |
+| `GET` | `/api/v1/doctor/patient/{id}` | Full patient detail (labs, vitals, alerts, summaries) |
+| `GET` | `/api/v1/summaries/{user_id}` | Retrieve latest AI-generated health summaries |
 
-## Process Integrity Safeguards (TA Use)
-Use these interventions to discourage fabrication and enforce process adherence.
+### Vitals & Alerts
+| Method | Path | Description |
+|--------|------|-------------|
+| `POST` | `/api/v1/vitals` | Ingest wearable readings batch |
+| `GET` | `/api/v1/alerts/{user_id}` | Retrieve active clinical alerts |
 
-### Tier 1: Soft Intervention (Mentorship)
-- Observer Effect Warning: reference a specific tracker data point to signal review.
-  Script: "I noticed in your tracker that Task A took exactly 4.0 hours and Task B took exactly 4.0 hours. Real development usually has more variation (e.g., 3.5 or 4.25). Please ensure you are logging actual clock times, not rough estimates."
-- Git History Trap: if commits show batching, ask for proof tied to the stated day.
-  Script: "Your tracker says you finished the API setup on Tuesday. Can you show me the git commit hash corresponding to that specific task on Tuesday?"
+---
 
-### Tier 2: Hard Intervention (Grading Penalty)
-- Variance Check: if variance is suspiciously low (e.g., every entry is 2 hours), deduct 10-20% of the weekly process grade for Data Quality.
-  Justification: "Data Quality. The logs provided lack statistical realism and appear smoothed. This is poor project management practice."
-- Friday Night Deduction: if the tracker was only touched right before the deadline, deduct 50% of the process grade for Lack of Continuous Integration.
-  Justification: "Agile requires iterative tracking. Batch-updating at the deadline defeats the purpose of the tracker."
+## Database Migrations
 
-### Tier 3: Formal Integrity Violation
-- Forensic Audit: if the tracker claims work with no code changes in `src/`, conduct a Viva audit.
-  Action: open GitHub Insights (Network graph) live, overlay tracker claims, and ask for the corresponding code.
-  Outcome: if no code exists for claimed work, report Academic Dishonesty to the course professor.
+The `src/db/migrations/` directory contains 24 sequential SQL migrations representing the full evolution of the schema:
 
-## Policy Text for Course Handout
-- Integrity of Project Artifacts: The `StatusTracker.xls` is a living document, not a homework assignment. It must reflect the actual state of development.
-- Batch Updates: Updating logs retroactively for multiple days/weeks is considered a failure of process adherence.
-- Fabrication: Logging hours for work not supported by version control evidence (git commits) constitutes academic dishonesty and will result in a grade of zero for that module.
-- Verification: Teaching staff reserve the right to audit tracker data against commit timestamps and variance analysis.
+| Range | Area |
+|---|---|
+| `000 – 004` | Core tables: users, reports, lab results, processing status |
+| `005 – 007` | RAG enhancements: section filtering, environmental evidence |
+| `008 – 010` | Wearable vitals schema, cleanup cron jobs |
+| `011 – 013` | Health summaries, lab text values, user demographics |
+| `014 – 015` | Privacy hardening, RLS policies |
+| `016 – 017` | Lab test normalization, environmental evidence column |
+| `018 – 023` | Analytics RPCs: trended labs, daily wearable aggregates, timezone fixes |
+
+---
+
+## AI Hyperparameter Reference
+
+All AI hyperparameters are documented with full rationale in [`docs/hyperparameter_documentation.md`](docs/hyperparameter_documentation.md). Key values:
+
+| Parameter | Value | Rationale |
+|---|---|---|
+| Embedding model | `BAAI/bge-base-en-v1.5` | #1 MTEB-ranked, CPU-deployable, 768-dim |
+| LLM model | `gemini-3.1-pro-preview` | Highest reasoning quality for medical context |
+| LLM temperature | `0.1` | Near-deterministic; prevents medical hallucinations |
+| Chunk size | `300 chars` | Captures 3–5 related lab results per chunk |
+| Chunk overlap | `50 chars` | ~17% overlap preserves sentence boundaries |
+| Retrieval top-k | `10` | Fills context budget without excess compute |
+| Match threshold | `0.4` | Recall-precision sweet spot for medical queries |
+
+---
+
+## Team
+
+Built by **Team 48** for the Design and Analysis of Software Systems (DASS) course, IIIT Hyderabad, Spring 2026, in collaboration with **SuryaQuantum AI**.
+
+| Contributor | Primary Area |
+|---|---|
+| **Tanush** | AI retrieval engine, RAG pipeline, data integration, automated intelligence layers |
+| **Aditya** | Android mobile application |
+| **Avnish** | Doctor dashboard frontend |
+| **Rishabh** | Backend infrastructure, auth |
+
+---
